@@ -1,0 +1,11 @@
+[package]
+name = "juicy-main"
+version = "1.0.0"
+edition = "2024"
+
+[dependencies]
+juicy-main-macro = { path = "macro" }
+clap = { version = "4.5.54", optional = true }
+
+[features]
+clap = ["dep:clap", "juicy-main-macro/clap"]
