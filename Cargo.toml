@@ -8,4 +8,5 @@ juicy-main-macro = { path = "macro" }
 clap = { version = "4.5.54", optional = true }
 
 [features]
+default = ["clap"]
 clap = ["dep:clap", "juicy-main-macro/clap"]
