@@ -3,7 +3,6 @@ use quote::ToTokens;
 use syn::{
     AngleBracketedGenericArguments, Error, FnArg, GenericArgument, Ident, ItemFn, PatType,
     PathArguments, Type, TypePath, TypeReference, TypeSlice, TypeTuple, parse::Parse, parse_quote,
-    spanned::Spanned,
 };
 
 #[proc_macro_attribute]
@@ -81,7 +80,7 @@ impl Parse for JuicyMain {
         let function: ItemFn = input.parse()?;
 
         if function.sig.ident != "main" {
-            return Err(Error::new(function.sig.ident.span(), "expected main"));
+            return Err(Error::new_spanned(function.sig.ident, "expected main"));
         }
 
         let mut args = None;
@@ -90,13 +89,13 @@ impl Parse for JuicyMain {
 
         for attr in &function.sig.inputs {
             let FnArg::Typed(PatType { ty, .. }) = attr else {
-                return Err(Error::new(attr.span(), "self is not accepted"));
+                return Err(Error::new_spanned(attr, "self is not accepted"));
             };
             let ty = ty.as_ref();
 
             if let Ok(found) = EnvKind::try_from(ty) {
                 if env.is_some() {
-                    return Err(Error::new(ty.span(), "only one env input is allowed"));
+                    return Err(Error::new_spanned(ty, "only one env input is allowed"));
                 }
                 if args.is_none() {
                     order = Order::EnvFirst;
@@ -104,20 +103,20 @@ impl Parse for JuicyMain {
                 env = Some(found);
             } else if let Ok(found) = ArgsKind::try_from(ty) {
                 if cfg!(not(feature = "clap")) && found == ArgsKind::Parsed {
-                    return Err(Error::new(
-                        ty.span(),
+                    return Err(Error::new_spanned(
+                        ty,
                         "command-line parsing with clap is not enabled",
                     ));
                 }
                 if args.is_some() {
-                    return Err(Error::new(ty.span(), "only one args input is allowed"));
+                    return Err(Error::new_spanned(ty, "only one args input is allowed"));
                 }
                 if env.is_none() {
                     order = Order::ArgsFirst;
                 }
                 args = Some(found);
             } else {
-                return Err(Error::new(ty.span(), "invalid input"));
+                return Err(Error::new_spanned(ty, "invalid input"));
             }
         }
 
@@ -160,8 +159,8 @@ impl TryFrom<&Type> for EnvKind {
 
     fn try_from(value: &Type) -> Result<Self, Self::Error> {
         let expected_one_of = || {
-            Err(Error::new(
-                value.span(),
+            Err(Error::new_spanned(
+                value,
                 "expected one of &[(String, String)], Vars, Vec<(String, String)>, or HashMap<String, String>",
             ))
         };

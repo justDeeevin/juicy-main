@@ -93,7 +93,7 @@ checksum = "a6cb138bb79a146c1bd460005623e142ef0181e3d0219cb493e02f7d08a35695"
 
 [[package]]
 name = "juicy-main"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "clap",
  "juicy-main-macro",
@@ -101,7 +101,7 @@ dependencies = [
 
 [[package]]
 name = "juicy-main-macro"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "proc-macro2",
  "quote",
