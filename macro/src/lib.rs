@@ -22,7 +22,6 @@ pub fn juicy(_attr: TokenStream, item: TokenStream) -> TokenStream {
     juicy.to_token_stream().into()
 }
 
-#[derive(Debug)]
 struct JuicyMain {
     function: ItemFn,
     args: Option<ArgsKind>,
@@ -30,7 +29,6 @@ struct JuicyMain {
     order: Order,
 }
 
-#[derive(Debug)]
 enum Order {
     EnvFirst,
     ArgsFirst,
@@ -150,7 +148,6 @@ fn type_is_string(value: &Type) -> bool {
     }
 }
 
-#[derive(Debug)]
 enum EnvKind {
     Slice,
     Vec,
@@ -250,7 +247,7 @@ impl ToTokens for EnvKind {
     }
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(PartialEq, Eq)]
 enum ArgsKind {
     Slice,
     Vec,

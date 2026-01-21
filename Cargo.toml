@@ -1,12 +1,28 @@
 [package]
 name = "juicy-main"
-version = "1.0.0"
-edition = "2024"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+description = "Zig's juicy main functionality in Rust"
+license.workspace = true
+repository.workspace = true
+keywords = ["cli", "env", "args", "clap", "main"]
+categories = ["command-line-interface"]
 
 [dependencies]
-juicy-main-macro = { path = "macro" }
+juicy-main-macro = { path = "macro", version = "1.0.0" }
 clap = { version = "4.5.54", optional = true }
 
 [features]
 default = ["clap"]
 clap = ["dep:clap", "juicy-main-macro/clap"]
+
+[workspace]
+members = ["macro"]
+
+[workspace.package]
+version = "1.0.0"
+edition = "2024"
+authors = ["Devin Droddy <devin@justdeeevin.dev>"]
+license = "GPL-3.0"
+repository = "https://github.com/justdeevin/juicy-main"
